@@ -6,6 +6,7 @@ var fs =require('fs');
 var courseInfo = {};
 var urls = [];
 var k = 0;
+var l = 0;
 request('https://www.greenskeeper.org/southern_california/golf_courses/', function (error, response, html) {
 	if (error) {
 		console.log(error);
@@ -13,7 +14,7 @@ request('https://www.greenskeeper.org/southern_california/golf_courses/', functi
 	if (!error && response.statusCode == 200) {
 		var $ = cheerio.load(html);
 		var obj = $('#countyCourses table')
-		var bleh = obj.first().find('td');
+		var bleh = obj.first().next().next().next().next().next().next().next().next().next().next().next().next().find('td');
 		name = ''
 		bleh.map(function (i, element) {
 			console.log(i)
@@ -30,6 +31,7 @@ request('https://www.greenskeeper.org/southern_california/golf_courses/', functi
 				if ((i % 2) === 0) {
 					var check = $(element).find('img').first().next().attr('src')
 					if (check === '/golf_courses/images/scorecard.png') {
+						l++;
 						courseInfo[name].url = 'https://www.greenskeeper.org' + courseInfo[name].link + '/scorecard.cfm'
 						console.log(courseInfo[name].url)
 						getScorecard(courseInfo[name].url, courseInfo[name])
@@ -97,9 +99,9 @@ request(url, function (error, response, html) {
 		object.results = results;
 		k++;
 		console.log(k)
-		if (k === 87) {
+		if (k === l) {
 
-		fs.writeFile('courseInfo.json', JSON.stringify(courseInfo), function (err) {
+		fs.writeFile('PalmSpringsCounty.json', JSON.stringify(courseInfo), function (err) {
 			if (err) throw err;
 			console.log('YAY')
 		});
