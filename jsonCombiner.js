@@ -42,7 +42,20 @@ fs.readFile('LosAngeles.json', function (err, data0) {
 																	continue;
 																}
 																else {
-																	curr.name = [key].toString();
+																	var name = [key].toString();
+																	if (name.match(/-/)) {
+																		name = name.split(' -');
+																		name = name[0];
+																	}
+																	if (name.match(/:/)) {
+																		name = name.split(':');
+																		name = name[0];
+																	}
+																	if (name.match(/\(/)) {
+																		name = name.split(' (');
+																		name = name[0] + ' - ' + name[1].slice(0, name[1].length - 1);
+																	}
+																	curr.name = name;
 																	curr.city = curr.city.slice(2,curr.city.length - 1);
 																	curr.county = county[i];
 																	curr.general = curr.results.stuff;
